@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Current Ticket</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Current Ticket</h1>
+        <form action="/tickets/addFastTrack" method="post">
+            <label for="ride">Add Fast-Track Ride:</label>
+            <select name="ride" id="ride">
+                <% rides.forEach(function(ride) { %>
+                    <option value="<%= ride._id %>"><%= ride.name %> - £<%= ride.fastTrackPrice.toFixed(2) %></option>
+                <% }); %>
+            </select>
+            <button type="submit">Add Ride</button>
+        </form>
+
+        <h2>Total: £<%= total.toFixed(2) %></h2>
+        <button class="secondary" onclick="window.location.href='/tickets/confirm'">Confirm Purchase</button>
+        <button class="secondary" onclick="window.location.href='/tickets/logout'">Logout</button>
+    </div>
+</body>
+</html>

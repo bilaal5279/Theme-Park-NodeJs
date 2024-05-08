@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Use Ride</title>
+</head>
+<body>
+    <h1>Use Ride from Ticket: <%= ticket._id %></h1>
+    <% if (rides.length > 0) { %>
+        <form action="/confirmUseRide/<%= ticket._id %>" method="post">
+            <% rides.forEach(function(ride) { %>
+                <div>
+                    <input type="checkbox" name="rideId" value="<%= ride._id %>"> <%= ride.name %>
+                </div>
+            <% }); %>
+            <button type="submit">Use Selected Rides</button>
+        </form>
+    <% } else { %>
+        <p>No rides available to use.</p>
+    <% } %>
+</body>
+</html>

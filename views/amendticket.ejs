@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Amend Ticket</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Amend Ticket</h1>
+        <form action="/tickets/amend" method="post">
+            <input type="hidden" name="ticketId" value="<%= ticket._id %>">
+            <h3>Available Fast-Track Rides</h3>
+            <% availableRides.forEach(function(ride) { %>
+                <input type="checkbox" name="rideId" value="<%= ride._id %>"> <%= ride.name %> (£<%= ride.fastTrackPrice %>)
+                <br>
+            <% }); %>
+            <button type="submit">Add Fast-Track Rides</button>
+        </form>
+    </div>
+</body>
+</html>

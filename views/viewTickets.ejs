@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Tickets</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>View Current and Future Tickets</h1>
+        <ul class="tickets-list">
+            <% tickets.forEach(function(ticket) { %>
+                <li>
+                    Date: <%= new Date(ticket.date).toDateString() %> - 
+                    Total: £<%= ticket.total %> - 
+                    Fast-Track Rides: 
+                    <% ticket.fastTrackRides.forEach(function(ride) { %>
+                        <%= ride.name %>, 
+                    <% }); %>
+                    <% if (ticket.isToday) { %>
+                        <button onclick="window.location.href='/useRide/<%= ticket._id %>'">Use a Ride</button>
+                    <% } %>
+                    <% if (ticket.isFuture) { %>
+                        <button onclick="window.location.href='/tickets/amend/<%= ticket._id %>'">Amend Ticket</button>
+                    <% } %>
+                </li>
+            <% }); %>
+        </ul>
+        
+        
+        
+        <button class="secondary" onclick="window.location.href='/tickets/order'">Order Another Ticket</button>
+        <button class="secondary" onclick="window.location.href='/auth/logout'">Logout</button>
+    </div>
+</body>
+</html>

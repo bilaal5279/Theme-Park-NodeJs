@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rides</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rides</h1>
+        <ul class="rides-list">
+            <% rides.forEach(function(ride) { %>
+                <li>
+                    <strong><%= ride.name %></strong> - 
+                    Fast-track cost: £<%= ride.fastTrackPrice.toFixed(2) %> - 
+                    Minimum height: <%= ride.minimumHeight %> cm
+                </li>
+            <% }); %>
+        </ul>
+        <button class="secondary" onclick="window.location.href='/auth/login'">Back to Login</button>
+    </div>
+</body>
+</html>

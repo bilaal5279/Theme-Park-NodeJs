@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Past Tickets</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>View Past Tickets</h1>
+        <ul class="tickets-list">
+            <% tickets.forEach(function(ticket) { %>
+                <li>
+                    Date: <%= ticket.date.toDateString() %> - Total: £<%= ticket.total.toFixed(2) %> - 
+                    Fast-Track Rides: 
+                    <% ticket.fastTrackRides.forEach(function(ride) { %>
+                        <%= ride.name %>, 
+                    <% }); %>
+                </li>
+            <% }); %>
+        </ul>
+        <button class="secondary" onclick="window.location.href='/auth/logout'">Logout</button>
+    </div>
+</body>
+</html>
