@@ -1,22 +1,19 @@
-const express = require('express');
-const router = express.Router();
-const { MongoClient, ObjectId } = require('mongodb');
+import express from 'express';
+import { MongoClient, ObjectId } from 'mongodb';
+import firebaseAdmin from 'firebase-admin';
+import { allowed } from '../authcontroller.js';
 
 // Middleware for checking if a user is authenticated
-function isAuthenticated(req, res, next) {
-    if (req.session.userId) {
-        return next();
-    } else {
-        return res.redirect('/auth/login');
-    }
-}
+
+
+const router = express.Router();
 
 // Order a ticket
-router.get('/order', isAuthenticated, (req, res) => {
+router.get('/order', allowed, (req, res) => {
     res.render('orderTicket');
 });
 
-router.post('/order', isAuthenticated, async (req, res) => {
+router.post('/order', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -44,7 +41,7 @@ router.post('/order', isAuthenticated, async (req, res) => {
 
 
 // Add fast-track ride
-router.post('/addFastTrack', isAuthenticated, async (req, res) => {
+router.post('/addFastTrack', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -79,7 +76,7 @@ router.post('/addFastTrack', isAuthenticated, async (req, res) => {
 });
 
 // View the current ticket
-router.get('/current', isAuthenticated, async (req, res) => {
+router.get('/current', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -98,7 +95,7 @@ router.get('/current', isAuthenticated, async (req, res) => {
 });
 
 // Confirm purchase
-router.get('/confirm', isAuthenticated, async (req, res) => {
+router.get('/confirm', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -116,7 +113,7 @@ router.get('/confirm', isAuthenticated, async (req, res) => {
 });
 
 // Buy the current ticket
-router.post('/buy', isAuthenticated, async (req, res) => {
+router.post('/buy', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -133,7 +130,7 @@ router.post('/buy', isAuthenticated, async (req, res) => {
     }
 });
 
-router.get('/future', isAuthenticated, async (req, res) => {
+router.get('/future', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -163,11 +160,8 @@ router.get('/future', isAuthenticated, async (req, res) => {
     }
 });
 
-
-
-
 // View past tickets
-router.get('/past', isAuthenticated, async (req, res) => {
+router.get('/past', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -184,9 +178,8 @@ router.get('/past', isAuthenticated, async (req, res) => {
     }
 });
 
-
 // Render the amend ticket page
-router.get('/amend/:id', isAuthenticated, async (req, res) => {
+router.get('/amend/:id', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const ticketId = new ObjectId(req.params.id);
@@ -205,7 +198,7 @@ router.get('/amend/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-router.post('/amend', isAuthenticated, async (req, res) => {
+router.post('/amend', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -238,9 +231,8 @@ router.post('/amend', isAuthenticated, async (req, res) => {
     }
 });
 
-
 // View all rides left available on the current ticket
-router.get('/remaining', isAuthenticated, async (req, res) => {
+router.get('/remaining', allowed, async (req, res) => {
     try {
         const db = req.dbClient.db("theme-park");
         const firebaseUID = req.session.userId;
@@ -271,10 +263,8 @@ router.get('/remaining', isAuthenticated, async (req, res) => {
     }
 });
 
-
-
 // Logout
-router.get('/logout', isAuthenticated, (req, res) => {
+router.get('/logout', allowed, (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.error("Error logging out:", err);
@@ -285,6 +275,4 @@ router.get('/logout', isAuthenticated, (req, res) => {
     });
 });
 
-
-module.exports = router;
-
+export default router;

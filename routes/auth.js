@@ -1,52 +1,23 @@
-const express = require('express');
+import express from 'express';
+import * as authController from '../authcontroller.js'; // Assuming you have your auth controller functions in a separate file
+
 const router = express.Router();
-const firebaseAdmin = require('firebase-admin');
 
 router.get('/register', (req, res) => {
     res.render('register');
 });
 
-router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-    try {
-        const userRecord = await firebaseAdmin.auth().createUser({
-            email: username,
-            password: password
-        });
-
-        req.session.userId = userRecord.uid; // Corrected
-        res.redirect('/tickets/order');
-    } catch (err) {
-        console.error("Error registering user:", err);
-        res.status(500).send("An error occurred during registration.");
-    }
-});
+router.post('/register', authController.createUser); // Use createUser middleware for registering
 
 router.get('/login', (req, res) => {
     res.render('login');
 });
 
-router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    try {
-        const user = await firebaseAdmin.auth().getUserByEmail(username);
-        req.session.userId = user.uid; // Corrected
-        res.redirect('/tickets/order');
-    } catch (err) {
-        console.error("Error logging in:", err);
-        res.status(500).send("An error occurred during login.");
-    }
+router.post('/login', authController.signIn); // Use signIn middleware for login
+
+router.get('/protected-route', authController.allowed, (req, res) => {
+    // This route is protected, only accessible if the user has a valid session cookie
+    res.render('protected-route', { userId: res.locals.uid });
 });
 
-router.post('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            console.error("Error logging out:", err);
-            return res.status(500).send("An error occurred during logout.");
-        } else {
-            res.redirect('/auth/login');
-        }
-    });
-});
-
-module.exports = router;
+export default router;
