@@ -11,7 +11,7 @@ async function createUser(req, res, next) {
         const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
         const sessionCookie = await firebaseAdmin.auth().createSessionCookie(idToken, { expiresIn });
         
-        const options = { maxAge: expiresIn, httpOnly: true, secure: true }; // Consider using secure: true in production
+        const options = { maxAge: expiresIn, httpOnly: true,};
         res.cookie("session", sessionCookie, options);
         next(); // Move to the next middleware function in the chain
     } catch (error) {
@@ -30,7 +30,7 @@ async function signIn(req, res, next) {
         const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
         const sessionCookie = await firebaseAdmin.auth().createSessionCookie(idToken, { expiresIn });
         
-        const options = { maxAge: expiresIn, httpOnly: true, secure: true }; // Consider using secure: true in production
+        const options = { maxAge: expiresIn, httpOnly: true}; 
         res.cookie("session", sessionCookie, options);
         
         res.redirect('/tickets/order'); // Redirect users to the order tickets page after login
